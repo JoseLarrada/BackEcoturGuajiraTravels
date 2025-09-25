@@ -40,9 +40,14 @@ public class DestinationDataController {
     }
 
 
-    @PutMapping
-    public ResponseEntity<ResponseTour> updateTour(@RequestBody DestinationData destinationData) {
-        return destinationDaaService.updateDestination(destinationData);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateDestination(@PathVariable String id,
+                                               @RequestPart("destination") String destinationJson,
+                                               @RequestPart(value = "mainImage", required = false) MultipartFile mainImage,
+                                               @RequestPart(value = "galleryImages", required = false) MultipartFile[] galleryImages,
+                                               @RequestPart(value = "keptGallery", required = false) String keptGalleryJson,
+                                               @RequestPart(value = "keptMainImage", required = false) String keptMainImageJson) {
+        return destinationDaaService.updateDestination(id, destinationJson, mainImage, galleryImages, keptGalleryJson, keptMainImageJson);
     }
 
     @DeleteMapping("/{id}")

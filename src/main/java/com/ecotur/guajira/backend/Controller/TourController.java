@@ -28,9 +28,12 @@ public class TourController {
 
         return tourService.addTour(tourJson, image);
     }
-    @PutMapping
-    public ResponseEntity<ResponseTour> updateTour(@RequestBody Tour tour) {
-        return tourService.updateTour(tour);
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseTour> updateTour(
+            @PathVariable String id,
+            @RequestPart("tour") String tourJson,
+            @RequestPart(value = "image", required = false) MultipartFile image) {
+        return tourService.updateTour(id, tourJson, image);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseTour> deleteTour(@PathVariable String id) {

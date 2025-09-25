@@ -28,6 +28,10 @@ public class EmpresaInfo {
     private List<String> exposiciones;
     private List<TimelineEvent> timeline;
 
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
     public static class TimelineEvent {
         private String year;
         private String title;

@@ -25,9 +25,12 @@ public class SlideController {
         return slideService.addSlide(slideJson, image);
     }
 
-    @PutMapping
-    public ResponseEntity<ResponseTour> updateSlide(@RequestBody Slide slide) {
-        return slideService.updateSlide(slide);
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseTour> updateSlide(
+            @PathVariable String id,
+            @RequestPart("slide") String slideJson,
+            @RequestPart(value = "image", required = false) MultipartFile image) {
+        return slideService.updateSlide(id, slideJson, image);
     }
 
     @DeleteMapping("/{id}")

@@ -20,7 +20,10 @@ public class TourOption {
     private String days;
 
     private HospedajeOption hospedajeOption;
-
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
     public static class HospedajeOption {
         private String name;
         private String description;

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,17 +34,35 @@ public class DestinoService {
             return ResponseEntity.badRequest().body(new ResponseTour(null, e.getMessage()));
         }
     }
-
-    public ResponseEntity<ResponseTour> updateDestino(Destino destino){
+    public ResponseEntity<ResponseTour> updateDestino(String id, String destinoJson, MultipartFile imagen) {
         try {
-            if(destinoRepository.existsById(destino.getId())){
-                destinoRepository.save(destino);
-                return ResponseEntity.ok(new ResponseTour(destino.getNombre(), "Actualizado correctamente"));
+            Optional<Destino> existingOpt = destinoRepository.findById(id);
+            if (existingOpt.isEmpty()) {
+                return ResponseEntity.badRequest().body(new ResponseTour(null, "No se encontró el destino"));
             }
-            return ResponseEntity.badRequest().body(new ResponseTour(destino.getNombre(), "No se encontro el destino"));
-        }
-        catch(Exception e){
-            return ResponseEntity.badRequest().build();
+
+            ObjectMapper mapper = new ObjectMapper();
+            Destino updates = mapper.readValue(destinoJson, Destino.class);
+
+            Destino existing = existingOpt.get();
+
+            // 🔹 Actualizar campos básicos
+            existing.setNombre(updates.getNombre());
+            existing.setDescripcion(updates.getDescripcion());
+            existing.setExperiencias(updates.getExperiencias());
+            existing.setIcon(updates.getIcon());
+            existing.setColor(updates.getColor());
+
+            // 🔹 Actualizar imagen si llega nueva
+            if (imagen != null && !imagen.isEmpty()) {
+                existing.setImagen(fileStorageService.saveFile(imagen));
+            }
+
+            destinoRepository.save(existing);
+
+            return ResponseEntity.ok(new ResponseTour(existing.getNombre(), "Actualizado correctamente"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ResponseTour(null, e.getMessage()));
         }
     }
 

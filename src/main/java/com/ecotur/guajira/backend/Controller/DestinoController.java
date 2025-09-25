@@ -30,9 +30,12 @@ public class DestinoController {
         return destinoService.addDestino(destinoJson, imagen);
     }
 
-    @PutMapping
-    public ResponseEntity<ResponseTour> updateDestino(@RequestBody Destino destino){
-        return destinoService.updateDestino(destino);
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseTour> updateDestino(
+            @PathVariable String id,
+            @RequestPart("destino") String destinoJson,
+            @RequestPart(value = "imagen", required = false) MultipartFile imagen) {
+        return destinoService.updateDestino(id, destinoJson, imagen);
     }
 
     @DeleteMapping("/{id}")

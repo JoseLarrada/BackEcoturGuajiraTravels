@@ -24,9 +24,12 @@ public class TestimonialController {
 
         return testimonialService.addTestimonial(testimonialJson, image);
     }
-    @PutMapping
-    public ResponseEntity<ResponseTour> updateTestimonial(@RequestBody Testimonial testimonial) {
-        return testimonialService.updateTestimonial(testimonial);
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseTour> updateTestimonial(
+            @PathVariable String id,
+            @RequestPart("testimonial") String testimonialJson,
+            @RequestPart(value = "image", required = false) MultipartFile image) {
+        return testimonialService.updateTestimonial(id, testimonialJson, image);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseTour> deleteTestimonial(@PathVariable String id) {
